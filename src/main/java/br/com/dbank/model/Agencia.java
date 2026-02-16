@@ -4,6 +4,7 @@ public class Agencia {
     private int codigoAgencia;
     private String nomeAgencia;
     private String endereco;
+    private String telefone;
 
     public int getCodigoAgencia() {
         return codigoAgencia;
@@ -27,5 +28,13 @@ public class Agencia {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }
