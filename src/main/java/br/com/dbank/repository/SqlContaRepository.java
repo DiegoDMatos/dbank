@@ -98,6 +98,31 @@ public class SqlContaRepository implements ContaRepository {
 
         @Override
         public List<Conta> selectContas() {
-            return new ArrayList<Conta>();
+            String sql = "SELECT * FROM conta";
+            List<Conta> contas = new ArrayList<>();
+
+            try(
+                    Connection conexao = ConexaoDB.getConexao();
+                    PreparedStatement smt = conexao.prepareStatement(sql);
+                    ResultSet select = smt.executeQuery();
+                    ){
+                while(select.next()){
+                    Conta conta = new Conta();
+
+                    conta.setNumeroConta(select.getString("numero_conta"));
+                    conta.setSaldo(select.getBigDecimal("saldo"));
+                     conta.setDataAbertura(select.getDate("data_abertura").toLocalDate());
+                     conta.setStatus(select.getString("status"));
+
+                     contas.add(conta);
+
+
+                }
+
+                return contas;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
