@@ -10,7 +10,7 @@ public class Cliente {
     private String telefone;
     private String email;
     private java.time.LocalDate dataNascimento;
-    private String senhaHash;
+    private String senha;
 
     public int getIdCliente() {
         return idCliente;
@@ -68,11 +68,11 @@ public class Cliente {
         this.dataNascimento = dataNascimento;
     }
 
-    public String getSenhaHash() {
-        return senhaHash;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenhaHash(String senhaHash) {
-        this.senhaHash = senhaHash;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
