@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 
 public class ContaPoupanca extends Conta{
     @Override
-    void sacar(BigDecimal valor) {
+    public void sacar(BigDecimal valor) {
 
     }
 
     @Override
-    void depositar(BigDecimal valor) {
+    public void depositar(BigDecimal valor) {
 
     }
 

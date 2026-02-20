@@ -1,20 +1,23 @@
 package br.com.dbank.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
-public abstract class Conta {
-    private String titular;
+public class Conta {
+    private Cliente cliente;
+    private Agencia agencia;
     private String numeroConta;
     private BigDecimal saldo;
-    private String agencia;
+    private LocalDate dataAbertura;
+    private String status;
 
 
-    public String getTitular() {
-        return titular;
+    public Cliente getCliente() {
+        return this.cliente;
     }
 
-    public void setTitular(String titular) {
-        this.titular = titular;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public String getNumeroConta() {
@@ -33,14 +36,33 @@ public abstract class Conta {
         this.saldo = saldo;
     }
 
-    public String getAgencia() {
+    public Agencia getAgencia() {
         return agencia;
     }
 
-    public void setAgencia(String agencia) {
+    public void setAgencia(Agencia agencia) {
         this.agencia = agencia;
     }
 
-    abstract void sacar(BigDecimal valor);
-    abstract void depositar(BigDecimal valor);
+    public void sacar(BigDecimal valor){
+
+    };
+    public void depositar(BigDecimal valor){
+
+    };
+
+    public LocalDate getDataAbertura() {
+        return dataAbertura;
+    }
+
+    public void setDataAbertura(LocalDate dataAbertura) {
+        this.dataAbertura = dataAbertura;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
