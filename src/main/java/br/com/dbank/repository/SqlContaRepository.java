@@ -18,7 +18,7 @@ public class SqlContaRepository implements ContaRepository {
             try (Connection conexao = ConexaoDB.getConexao();
                  PreparedStatement smt = conexao.prepareStatement(sql)) {
 
-                smt.setString(1, conta.getNumeroConta()); // O VARCHAR(3) que definimos
+                smt.setString(1, conta.getNumeroConta());
                 smt.setBigDecimal(2, conta.getSaldo());
                 smt.setDate(3, Date.valueOf(conta.getDataAbertura()));
                 smt.setString(4, conta.getStatus());
@@ -65,37 +65,43 @@ public class SqlContaRepository implements ContaRepository {
     }
 
     @Override
-        public Conta Select(String numero_conta) {
-            String sql = "SELECT * FROM conta WHERE numero_conta = ?";
-            try (Connection conexao = ConexaoDB.getConexao();
-                 PreparedStatement smt = conexao.prepareStatement(sql)) {
+    public Conta Select(String numero_conta) {
+        // Usamos 'nome' pois é o que está na sua tabela cliente
+        String sql = "SELECT c.*, cl.nome FROM conta c " +
+                "INNER JOIN cliente cl ON c.id_cliente = cl.id_cliente " +
+                "WHERE c.numero_conta = ?";
 
-                smt.setString(1, numero_conta);
-                try (ResultSet rs = smt.executeQuery()) {
-                    if (rs.next()) {
-                        Conta conta = new Conta();
-                        conta.setNumeroConta(rs.getString("numero_conta"));
-                        conta.setSaldo(rs.getBigDecimal("saldo"));
-                        conta.setDataAbertura(rs.getDate("data_abertura").toLocalDate());
-                        conta.setStatus(rs.getString("status"));
+        try (Connection conexao = ConexaoDB.getConexao();
+             PreparedStatement smt = conexao.prepareStatement(sql)) {
 
-                        Cliente cliente = new Cliente();
-                        cliente.setIdCliente(rs.getInt("id_cliente"));
-                        conta.setCliente(cliente);
+            smt.setString(1, numero_conta);
+            try (ResultSet rs = smt.executeQuery()) {
+                if (rs.next()) {
+                    Conta conta = new Conta();
+                    Cliente cliente = new Cliente();
 
-                        Agencia agencia = new Agencia();
-                        agencia.setCodigoAgencia(rs.getInt("codigo_agencia"));
-                        conta.setAgencia(agencia);
+                    cliente.setNome(rs.getString("nome"));
+                    cliente.setIdCliente(rs.getInt("id_cliente"));
+                    conta.setCliente(cliente);
 
-                        return conta;
-                    }
+                    conta.setNumeroConta(rs.getString("numero_conta"));
+                    conta.setSaldo(rs.getBigDecimal("saldo"));
+                    conta.setDataAbertura(rs.getDate("data_abertura").toLocalDate());
+                    conta.setStatus(rs.getString("status"));
+
+                    Agencia agencia = new Agencia();
+                    agencia.setCodigoAgencia(rs.getInt("codigo_agencia"));
+                    conta.setAgencia(agencia);
+
+                    return conta;
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao buscar conta", e);
             }
-            return null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar conta no MySQL", e);
         }
-
+        return null;
+    }
         @Override
         public List<Conta> selectContas() {
             String sql = "SELECT * FROM conta";
@@ -105,24 +111,32 @@ public class SqlContaRepository implements ContaRepository {
                     Connection conexao = ConexaoDB.getConexao();
                     PreparedStatement smt = conexao.prepareStatement(sql);
                     ResultSet select = smt.executeQuery();
-                    ){
-                while(select.next()){
+                    )
+            {
+                while(select.next())
+                {
                     Conta conta = new Conta();
 
                     conta.setNumeroConta(select.getString("numero_conta"));
                     conta.setSaldo(select.getBigDecimal("saldo"));
-                     conta.setDataAbertura(select.getDate("data_abertura").toLocalDate());
-                     conta.setStatus(select.getString("status"));
+                    conta.setDataAbertura(select.getDate("data_abertura").toLocalDate());
+                    conta.setStatus(select.getString("status"));
+
+                    Cliente cliente = new Cliente();
+                    cliente.setIdCliente(select.getInt("id_cliente"));
+                    conta.setCliente(cliente);
+
+                    Agencia agencia = new Agencia();
+                    agencia.setCodigoAgencia(select.getInt("codigo_agencia"));
+                    conta.setAgencia(agencia);
 
                      contas.add(conta);
-
-
                 }
 
-                return contas;
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
                 throw new RuntimeException(e);
             }
-
+            return contas;
         }
     }
