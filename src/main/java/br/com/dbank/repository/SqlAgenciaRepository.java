@@ -16,7 +16,7 @@ public class SqlAgenciaRepository implements AgenciaRepository{
 
 
     @Override
-    public void insert(Agencia agencia) {
+    public void insertAgencia(Agencia agencia) {
         String sql = "INSERT INTO agencia (nome_agencia, endereco, telefone) VALUES (?, ?, ?)";
         try(
                 Connection conexao = ConexaoDB.getConexao();
@@ -34,7 +34,7 @@ public class SqlAgenciaRepository implements AgenciaRepository{
     }
 
     @Override
-    public void update(Agencia agencia) {
+    public void updateAgencia(Agencia agencia) {
         String sql = "UPDATE agencia set nome_agencia = ?, endereco = ?, telefone = ? WHERE codigo_agencia = ?";
 
         try(
@@ -56,7 +56,7 @@ public class SqlAgenciaRepository implements AgenciaRepository{
     }
 
     @Override
-    public void delete(int id) {
+    public void deleteAgencia(int id) {
         String sql = "DELETE from agencia WHERE codigo_agencia = ?";
         try(
                 Connection conexao = ConexaoDB.getConexao();
@@ -74,7 +74,7 @@ public class SqlAgenciaRepository implements AgenciaRepository{
     }
 
     @Override
-    public Agencia selectById(int id) {
+    public Agencia selectByIdAgencia(int id) {
         String sql = "SELECT * FROM agencia WHERE codigo_agencia = ?";
         try (Connection conexao = ConexaoDB.getConexao();
              PreparedStatement smt = conexao.prepareStatement(sql)) {
@@ -97,29 +97,24 @@ public class SqlAgenciaRepository implements AgenciaRepository{
 
     @Override
     public List<Agencia> listarAgencias() {
-        String sql = "SELECT * from agencia";
-        List<Agencia> agencias = new ArrayList<>();
+        String sql = "SELECT * FROM agencia";
+        List<Agencia> lista = new ArrayList<>();
 
-        try(
-                Connection conexao = ConexaoDB.getConexao();
-                PreparedStatement smt = conexao.prepareStatement(sql);
-                ResultSet select = smt.executeQuery();
-                ){
+        try (Connection conn = br.com.dbank.util.ConexaoDB.getConexao();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            while (select.next()){
+            while (rs.next()) {
                 Agencia agencia = new Agencia();
-
-                agencia.setCodigoAgencia(select.getInt("codigo_agencia"));
-                agencia.setNomeAgencia(select.getString("nome_agencia"));
-                agencia.setEndereco(select.getString("endereco"));
-                agencia.setTelefone(select.getString("telefone"));
-                agencias.add(agencia);
+                agencia.setCodigoAgencia(rs.getInt("id_agencia"));
+                agencia.setNomeAgencia(rs.getString("nome_agencia"));
+                agencia.setEndereco(rs.getString("endereco"));
+                lista.add(agencia);
             }
-            return agencias;
-
         } catch (SQLException e) {
-            System.out.println("Erro ao acessar dados");
-            return null;
+            throw new RuntimeException("Erro ao listar agências: " + e.getMessage());
         }
+        return lista;
     }
+
 }

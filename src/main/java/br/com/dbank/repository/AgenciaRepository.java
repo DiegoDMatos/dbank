@@ -5,10 +5,10 @@ import java.util.List;
 
 public interface AgenciaRepository {
 
-    void insert(Agencia agencia);
-    void update(Agencia agencia);
-    void delete(int id);
-    Agencia selectById(int id);
+    void insertAgencia(Agencia agencia);
+    void updateAgencia(Agencia agencia);
+    void deleteAgencia(int id);
+    Agencia selectByIdAgencia(int id);
     List<Agencia> listarAgencias();
 
 }

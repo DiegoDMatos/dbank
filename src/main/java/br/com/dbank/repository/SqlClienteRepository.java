@@ -10,26 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SqlClienteRepository implements ClienteRepository {
-    @Override
-    public void insert(Cliente cliente) {
-        String sql = "INSERT INTO cliente (cpf, nome, endereco, telefone, email, data_nascimento, senha) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int insert(Cliente cliente, String senha) {
+        String sql = "INSERT INTO cliente (nome, cpf, senha) VALUES (?, ?, ?)";
 
-        try(
-                Connection conexao = ConexaoDB.getConexao();
-                PreparedStatement smt = conexao.prepareStatement(sql);
-                ) {
-            smt.setString(1, cliente.getCpf());
-            smt.setString(2, cliente.getNome());
-            smt.setString(3, cliente.getEndereco());
-            smt.setString(4, cliente.getTelefone());
-            smt.setString(5, cliente.getEmail());
-            smt.setDate(6, Date.valueOf(cliente.getDataNascimento()));
-            smt.setString(7, cliente.getSenha());
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement smt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
+            smt.setString(1, cliente.getNome());
+            smt.setString(2, cliente.getCpf());
+            smt.setString(3, senha);
             smt.executeUpdate();
+
+            try (ResultSet rs = smt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         } catch (SQLException e) {
-            throw new RuntimeException("Não foi possível inserir o cliente",e);
+            throw new RuntimeException("Erro ao inserir cliente: " + e.getMessage());
         }
+        return -1;
     }
 
     @Override
@@ -130,4 +130,5 @@ public class SqlClienteRepository implements ClienteRepository {
             return null;
         }
     }
+
 }

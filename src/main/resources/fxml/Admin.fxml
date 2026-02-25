@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox prefHeight="600.0" prefWidth="850.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.dbank.controller.AdminController">
+    <children>
+        <Label text="Painel do Administrador" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #263238;">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20" />
+            </padding>
+        </Label>
+
+        <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="Gerenciar Clientes">
+                    <content>
+                        <VBox spacing="15">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20" />
+                            </padding>
+                            <children>
+                                <TableView fx:id="tblClientes" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colCpf" text="CPF" prefWidth="120" />
+                                        <TableColumn fx:id="colNome" text="Nome" prefWidth="250" />
+                                        <TableColumn fx:id="colTelefone" text="Telefone" prefWidth="150" />
+                                    </columns>
+                                </TableView>
+                                <HBox spacing="10" alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button text="Novo Cliente" onAction="#handleNovoCliente" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+                                        <Button text="Editar Selecionado" onAction="#handleEditarCliente" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+
+                <Tab text="Agências">
+                    <content>
+                        <VBox spacing="15">
+                            <padding><Insets top="20" right="20" bottom="20" left="20" /></padding>
+                            <children>
+                                <TableView fx:id="tblAgencias" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="colIdAgencia" text="ID" prefWidth="50" />
+                                        <TableColumn fx:id="colNomeAgencia" text="Nome" prefWidth="250" />
+                                        <TableColumn fx:id="colEnderecoAgencia" text="Endereço" prefWidth="350" />
+                                    </columns>
+                                </TableView>
+                                <HBox spacing="10" alignment="CENTER_RIGHT">
+                                    <children>
+                                        <Button text="Nova Agência" onAction="#handleNovaAgencia" style="-fx-background-color: #2196F3; -fx-text-fill: white;" />
+                                        <Button text="Editar Selecionada" onAction="#handleEditarAgencia" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>

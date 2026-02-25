@@ -9,17 +9,14 @@ public class TesteCliente {
     public static void main(String[] args) {
         SqlClienteRepository repo = new SqlClienteRepository();
 
-        // Testando Inserção com um CPF NOVO para evitar o erro de duplicata
+
         Cliente c = new Cliente();
         c.setNome("João do IFCE");
-        c.setCpf("999.888.777-00"); // Use um CPF que você ainda não usou
+        c.setCpf("999.888.777-00");
         c.setDataNascimento(LocalDate.of(1995, 5, 20)); // Evita o NullPointerException
 
-        repo.insert(c);
-        System.out.println("✅ Cliente inserido!");
+        int id = repo.insert(c, "senha123");
+        System.out.println("Cliente inserido com ID: " + id);
 
-        // Testando a Busca (ajuste o nome do método conforme sua interface)
-        // Cliente buscado = repo.selectByCpf("999.888.777-00");
-        // System.out.println("Cliente encontrado: " + buscado.getNome());
     }
 }

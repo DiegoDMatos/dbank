@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" prefHeight="400.0" prefWidth="350.0"
+      style="-fx-background-color: #263238;" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.dbank.controller.AdminLoginController">
+    <children>
+        <Label text="DBank Admin" textFill="WHITE">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+        <VBox spacing="10.0" maxWidth="250.0">
+            <TextField fx:id="txtUsuario" placeholder="Usuário Admin" />
+            <PasswordField fx:id="txtSenha" placeholder="Senha" />
+            <Button onAction="#handleLogin" prefWidth="250.0" text="Acessar Painel"
+                    style="-fx-background-color: #1EBDD9; -fx-text-fill: white; -fx-font-weight: bold;" />
+        </VBox>
+    </children>
+</VBox>

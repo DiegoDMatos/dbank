@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.com.dbank.controller.EditClienteController">
+    <padding>
+        <Insets top="25.0" right="25.0" bottom="25.0" left="25.0" />
+    </padding>
+    <children>
+        <Label text="Editar Cadastro de Cliente" style="-fx-text-fill: #2c3e50;">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="10.0" />
+            </VBox.margin>
+        </Label>
+
+        <VBox spacing="5.0">
+            <Label text="CPF (Não alterável):" />
+            <TextField fx:id="txtCpf" editable="false" prefHeight="35.0" style="-fx-background-color: #f0f0f0; -fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+        </VBox>
+
+        <VBox spacing="5.0">
+            <Label text="Nome Completo:" />
+            <TextField fx:id="txtNome" prefHeight="35.0" promptText="Digite o nome do cliente" style="-fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+        </VBox>
+
+        <VBox spacing="5.0">
+            <Label text="Telefone de Contato:" />
+            <TextField fx:id="txtTelefone" prefHeight="35.0" promptText="(00) 00000-0000" style="-fx-border-color: #dcdde1; -fx-border-radius: 5;" />
+        </VBox>
+
+        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+            <children>
+                <Button text="Cancelar" onAction="#handleCancelar" prefHeight="35.0" prefWidth="100.0"
+                        style="-fx-background-radius: 5;" />
+                <Button text="Salvar Alterações" onAction="#handleSalvar" prefHeight="35.0" prefWidth="150.0"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

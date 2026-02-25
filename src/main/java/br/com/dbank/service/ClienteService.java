@@ -1,35 +1,52 @@
 package br.com.dbank.service;
 
+import br.com.dbank.model.Agencia;
 import br.com.dbank.model.Cliente;
+import br.com.dbank.model.Conta;
 import br.com.dbank.repository.SqlClienteRepository;
+import br.com.dbank.repository.SqlContaRepository;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ClienteService {
     private SqlClienteRepository clienteRepo = new SqlClienteRepository();
+    private SqlContaRepository contaRepo = new SqlContaRepository();
 
-    public boolean cadastrarCliente(Cliente cliente) {
-        if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
-            System.out.println("Erro: O nome do cliente é obrigatório.");
-            return false;
-        }
-
-        if (cliente.getCpf() == null || cliente.getCpf().length() < 11) {
-            System.out.println("Erro: CPF inválido.");
-            return false;
+    public String cadastrarCliente(Cliente cliente, String senha) {
+        if (cliente == null || cliente.getNome().isEmpty() || cliente.getCpf().isEmpty() || senha.isEmpty()) {
+            throw new RuntimeException("Nome, CPF e Senha são obrigatórios!");
         }
 
         try {
-            clienteRepo.insert(cliente);
-            System.out.println("Cliente " + cliente.getNome() + " cadastrado com sucesso!");
-            return true;
-        } catch (RuntimeException e) {
-            // Captura erros como CPF duplicado
-            System.out.println("Erro ao salvar no banco: " + e.getMessage());
-            return false;
+            int idGerado = clienteRepo.insert(cliente, senha);
+            cliente.setIdCliente(idGerado);
+
+            String numeroGerado = gerarNumeroContaAleatorio();
+
+            Conta novaConta = new Conta();
+            novaConta.setNumeroConta(numeroGerado);
+            novaConta.setSaldo(java.math.BigDecimal.ZERO);
+            novaConta.setDataAbertura(java.time.LocalDate.now());
+            novaConta.setStatus("ATIVA");
+            novaConta.setCliente(cliente);
+
+            br.com.dbank.model.Agencia ag = new br.com.dbank.model.Agencia();
+            ag.setCodigoAgencia(1);
+            novaConta.setAgencia(ag);
+
+            contaRepo.insert(novaConta);
+
+            return numeroGerado;
+        } catch (Exception e) {
+            throw new RuntimeException("Falha no cadastro: " + e.getMessage());
         }
     }
 
-    public List<Cliente> listarTodos() {
-        return clienteRepo.select();
+    private String gerarNumeroContaAleatorio() {
+        int numero = (int) (Math.random() * 900) + 100;
+        return String.valueOf(numero);
     }
+
 }

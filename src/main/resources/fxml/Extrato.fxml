@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="15.0" prefWidth="500.0" prefHeight="400.0"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="br.com.dbank.controller.ExtratoController">
+    <children>
+        <Label text="Extrato Bancário">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+
+        <TableView fx:id="tblExtrato" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTipo" text="Operação" prefWidth="120.0" />
+                <TableColumn fx:id="colValor" text="Valor" prefWidth="100.0" />
+                <TableColumn fx:id="colData" text="Data e Hora" prefWidth="250.0" />
+            </columns>
+        </TableView>
+
+        <Button text="Fechar" onAction="#Fechar" />
+    </children>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+</VBox>

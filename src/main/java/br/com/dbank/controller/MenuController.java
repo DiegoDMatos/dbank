@@ -3,10 +3,16 @@ package br.com.dbank.controller;
 import br.com.dbank.model.Conta;
 import br.com.dbank.service.ContaService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 public class MenuController {
@@ -88,7 +94,7 @@ public class MenuController {
     }
 
     @FXML
-    public void handleTransferir() {
+    public void Transferir() {
         TextInputDialog dialogConta = new TextInputDialog();
         dialogConta.setTitle("Transferência");
         dialogConta.setHeaderText("Dados do Destinatário");
@@ -104,7 +110,7 @@ public class MenuController {
                 try {
                     BigDecimal valor = new BigDecimal(valorStr);
 
-                    contaService.transferir(contaAtiva, numDestino, valor);
+                    contaService.Transferir(contaAtiva, numDestino, valor);
 
                     atualizarInterface();
                     mostrarAlerta("Sucesso", "Transferência enviada para a conta " + numDestino, Alert.AlertType.INFORMATION);
@@ -114,6 +120,25 @@ public class MenuController {
             });
         });
     }
+    @FXML
+    public void AbrirExtrato() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Extrato.fxml"));
+            Parent root = loader.load();
 
-    // Futuramente adicionaremos aqui os métodos para Saque e Depósito
+            ExtratoController extratoCtrl = loader.getController();
+
+            extratoCtrl.carregarDados(this.contaAtiva.getNumeroConta());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("DBank - Extrato Detalhado");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarAlerta("Erro", "Não foi possível carregar o extrato: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
 }

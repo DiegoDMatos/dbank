@@ -66,7 +66,6 @@ public class SqlContaRepository implements ContaRepository {
 
     @Override
     public Conta Select(String numero_conta) {
-        // Usamos 'nome' pois é o que está na sua tabela cliente
         String sql = "SELECT c.*, cl.nome FROM conta c " +
                 "INNER JOIN cliente cl ON c.id_cliente = cl.id_cliente " +
                 "WHERE c.numero_conta = ?";
@@ -139,4 +138,68 @@ public class SqlContaRepository implements ContaRepository {
             }
             return contas;
         }
+
+    public Conta validarLogin(String numeroConta, String senha) {
+        String sql = "SELECT co.*, cl.nome FROM conta co " +
+                "JOIN cliente cl ON co.id_cliente = cl.id_cliente " +
+                "WHERE co.numero_conta = ? AND cl.senha = ?";
+
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement smt = conn.prepareStatement(sql)) {
+
+            smt.setString(1, numeroConta);
+            smt.setString(2, senha);
+            ResultSet rs = smt.executeQuery();
+
+            if (rs.next()) {
+                Conta conta = new Conta();
+                conta.setNumeroConta(rs.getString("numero_conta"));
+                conta.setSaldo(rs.getBigDecimal("saldo"));
+
+                Cliente c = new Cliente();
+                c.setNome(rs.getString("nome"));
+                conta.setCliente(c);
+
+                return conta;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao validar login: " + e.getMessage());
+        }
+        return null;
     }
+
+    public Conta buscarPorContaESenha(String numeroConta, String senha) {
+        String sql = "SELECT co.*, cl.nome FROM conta co " +
+                "JOIN cliente cl ON co.id_cliente = cl.id_cliente " +
+                "WHERE TRIM(co.numero_conta) = ? AND cl.senha = ?";
+
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement smt = conn.prepareStatement(sql)) {
+
+            smt.setString(1, numeroConta.trim());
+            smt.setString(2, senha);
+
+            try (ResultSet rs = smt.executeQuery()) {
+                if (rs.next()) {
+                    Conta conta = new Conta();
+                    conta.setNumeroConta(rs.getString("numero_conta"));
+                    conta.setSaldo(rs.getBigDecimal("saldo"));
+
+                    br.com.dbank.model.Agencia ag = new br.com.dbank.model.Agencia();
+
+                    ag.setCodigoAgencia(rs.getInt("codigo_agencia"));
+                    conta.setAgencia(ag);
+
+                    br.com.dbank.model.Cliente c = new br.com.dbank.model.Cliente();
+                    c.setNome(rs.getString("nome"));
+                    conta.setCliente(c);
+
+                    return conta;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro técnico no login: " + e.getMessage());
+        }
+        return null;
+    }
+}

@@ -14,7 +14,7 @@ public class TesteAgencia {
         ag.setTelefone("8599999999");
 
         try {
-            repo.insert(ag);
+            repo.insertAgencia(ag);
             System.out.println("✅ SUCESSO: Agência " + ag.getCodigoAgencia() + " inserida!");
         } catch (Exception e) {
             System.err.println("❌ FALHA AO INSERIR:");

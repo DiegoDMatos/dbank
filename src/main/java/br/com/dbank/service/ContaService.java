@@ -65,12 +65,9 @@ public class ContaService {
         transacaoRepo.insert(t);
     }
 
-    public void transferir(Conta origem, String numDestino, BigDecimal valor) {
-        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RuntimeException("O valor da transferência deve ser positivo.");
-        }
-        if (origem.getSaldo().compareTo(valor) < 0) {
-            throw new RuntimeException("Saldo insuficiente para transferência.");
+    public void Transferir(Conta origem, String numDestino, BigDecimal valor) {
+        if (origem.getNumeroConta().equals(numDestino)) {
+            throw new RuntimeException("Você não pode transferir para a própria conta.");
         }
 
         Conta destino = contaRepo.Select(numDestino);
@@ -78,16 +75,15 @@ public class ContaService {
             throw new RuntimeException("Conta de destino não encontrada.");
         }
 
+        if (origem.getSaldo().compareTo(valor) < 0) {
+            throw new RuntimeException("Saldo insuficiente.");
+        }
+
         origem.setSaldo(origem.getSaldo().subtract(valor));
         destino.setSaldo(destino.getSaldo().add(valor));
 
         contaRepo.update(origem);
         contaRepo.update(destino);
-
-        registrarMovimentacao(origem, "TRANSFERENCIA ENVIADA", valor);
-        registrarMovimentacao(destino, "TRANSFERENCIA RECEBIDA", valor);
-
-        System.out.println("Transferência realizada com sucesso.");
     }
 
     public Conta login(String numero, int agencia) {
@@ -99,5 +95,9 @@ public class ContaService {
         }
 
         return null;
+    }
+
+    public Conta loginComSenha(String numeroConta, String senha) {
+        return contaRepo.buscarPorContaESenha(numeroConta, senha);
     }
 }
