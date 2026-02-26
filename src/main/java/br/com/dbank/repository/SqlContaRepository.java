@@ -169,7 +169,7 @@ public class SqlContaRepository implements ContaRepository {
     }
 
     public Conta buscarPorContaESenha(String numeroConta, String senha) {
-        String sql = "SELECT co.*, cl.nome FROM conta co " +
+        String sql = "SELECT co.*, cl.nome, cl.id_cliente FROM conta co " +
                 "JOIN cliente cl ON co.id_cliente = cl.id_cliente " +
                 "WHERE TRIM(co.numero_conta) = ? AND cl.senha = ?";
 
@@ -185,15 +185,16 @@ public class SqlContaRepository implements ContaRepository {
                     conta.setNumeroConta(rs.getString("numero_conta"));
                     conta.setSaldo(rs.getBigDecimal("saldo"));
 
-                    br.com.dbank.model.Agencia ag = new br.com.dbank.model.Agencia();
-
+                    Agencia ag = new Agencia();
                     ag.setCodigoAgencia(rs.getInt("codigo_agencia"));
                     conta.setAgencia(ag);
 
-                    br.com.dbank.model.Cliente c = new br.com.dbank.model.Cliente();
+                    Cliente c = new Cliente();
                     c.setNome(rs.getString("nome"));
-                    conta.setCliente(c);
 
+                    c.setIdCliente(rs.getInt("id_cliente"));
+
+                    conta.setCliente(c);
                     return conta;
                 }
             }

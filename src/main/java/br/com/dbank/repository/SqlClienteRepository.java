@@ -78,7 +78,8 @@ public class SqlClienteRepository implements ClienteRepository {
 
     @Override
     public Cliente selectById(int id) {
-        String sql = "SELECT * FROM cliente WHERE cliente_id = ?";
+        String sql = "SELECT * FROM cliente WHERE id_cliente = ?";
+
         try (Connection conexao = ConexaoDB.getConexao();
              PreparedStatement smt = conexao.prepareStatement(sql)) {
 
@@ -88,16 +89,14 @@ public class SqlClienteRepository implements ClienteRepository {
                     Cliente c = new Cliente();
                     c.setIdCliente(rs.getInt("id_cliente"));
                     c.setNome(rs.getString("nome"));
-                    c.setEndereco(rs.getString("endereco"));
-                    c.setTelefone(rs.getString("telefone"));
-                    c.setEmail(rs.getString("email"));
+                    c.setSenha(rs.getString("senha"));
                     return c;
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar cliente", e);
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar cliente: " + e.getMessage(), e);
         }
-        System.out.println("Cliente não encontrado");
         return null;
     }
 
@@ -120,6 +119,7 @@ public class SqlClienteRepository implements ClienteRepository {
                 c.setEndereco(select.getString("endereco"));
                 c.setTelefone(select.getString("telefone"));
                 c.setEmail(select.getString("email"));
+                c.setSenha(select.getString("senha"));
                 clientes.add(c);
 
             }

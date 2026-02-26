@@ -10,14 +10,16 @@ import java.util.Random;
 
 public class SqlAdminRepository implements AdminRepository {
 
-    @Override
     public void inserirAgencia(String nome, String endereco) {
-        String sql = "INSERT INTO agencia (nome, endereco) VALUES (?, ?)";
-        try (Connection conexao = ConexaoDB.getConexao();
-             PreparedStatement smt = conexao.prepareStatement(sql)) {
+        String sql = "INSERT INTO agencia (nome_agencia, endereco) VALUES (?, ?)";
+
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement smt = conn.prepareStatement(sql)) {
+
             smt.setString(1, nome);
             smt.setString(2, endereco);
             smt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir agência: " + e.getMessage(), e);
         }
@@ -51,7 +53,7 @@ public class SqlAdminRepository implements AdminRepository {
                 System.out.println("Cliente e conta " + numeroGerado + " criados com sucesso!");
 
             } catch (SQLException e) {
-                conexao.rollback(); // Desfaz tudo se der erro
+                conexao.rollback();
                 throw e;
             }
         } catch (SQLException e) {
@@ -108,22 +110,18 @@ public class SqlAdminRepository implements AdminRepository {
     }
 
     public void updateAgencia(Agencia agencia) {
-        String sql = "UPDATE agencia SET nome_agencia = ?, endereco = ?, telefone = ? WHERE codigo_agencia = ?";
+        String sql = "UPDATE agencia SET nome_agencia = ?, endereco = ? WHERE codigo_agencia = ?";
 
-        try (Connection conn = br.com.dbank.util.ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexaoDB.getConexao();
+             PreparedStatement smt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, agencia.getNomeAgencia());
-            stmt.setString(2, agencia.getEndereco());
-            stmt.setString(3, agencia.getTelefone());
-            stmt.setInt(4, agencia.getCodigoAgencia());
-            int rowsAffected = stmt.executeUpdate();
+            smt.setString(1, agencia.getNomeAgencia());
+            smt.setString(2, agencia.getEndereco());
+            smt.setInt(3, agencia.getCodigoAgencia());
+            smt.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("Agência atualizada com sucesso no banco de dados.");
-            }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar agência no repositório: " + e.getMessage());
+            throw new RuntimeException("Erro ao atualizar agência: " + e.getMessage(), e);
         }
     }
 

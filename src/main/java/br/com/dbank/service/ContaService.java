@@ -1,5 +1,6 @@
 package br.com.dbank.service;
 
+import br.com.dbank.exception.ContaNaoEncontradaException;
 import br.com.dbank.exception.SaldoInsuficienteException;
 import br.com.dbank.model.*;
 import br.com.dbank.repository.*;
@@ -72,11 +73,11 @@ public class ContaService {
 
         Conta destino = contaRepo.Select(numDestino);
         if (destino == null) {
-            throw new RuntimeException("Conta de destino não encontrada.");
+            throw new ContaNaoEncontradaException (numDestino);
         }
 
         if (origem.getSaldo().compareTo(valor) < 0) {
-            throw new RuntimeException("Saldo insuficiente.");
+        throw new SaldoInsuficienteException("Saldo insuficiente.");
         }
 
         origem.setSaldo(origem.getSaldo().subtract(valor));
@@ -84,6 +85,20 @@ public class ContaService {
 
         contaRepo.update(origem);
         contaRepo.update(destino);
+
+        Transacao transacaoOrigem = new Transacao();
+        transacaoOrigem.setTipoTransacao("TRANSFERENCIA ENVIADA");
+        transacaoOrigem.setValor(valor);
+        transacaoOrigem.setDataHora(java.time.LocalDateTime.now());
+        transacaoOrigem.setConta(origem);
+        transacaoRepo.insert(transacaoOrigem);
+
+        Transacao transacaoDestino = new Transacao();
+        transacaoDestino.setTipoTransacao("TRANSFERENCIA RECEBIDA");
+        transacaoDestino.setValor(valor);
+        transacaoDestino.setDataHora(java.time.LocalDateTime.now());
+        transacaoDestino.setConta(destino);
+        transacaoRepo.insert(transacaoDestino);
     }
 
     public Conta login(String numero, int agencia) {
@@ -98,6 +113,19 @@ public class ContaService {
     }
 
     public Conta loginComSenha(String numeroConta, String senha) {
-        return contaRepo.buscarPorContaESenha(numeroConta, senha);
+        Conta conta = contaRepo.buscarPorContaESenha(numeroConta, senha);
+
+        if (conta != null && conta.getCliente() != null) {
+            SqlClienteRepository clienteRepo = new SqlClienteRepository();
+
+            int idDoCliente = conta.getCliente().getIdCliente();
+            Cliente clienteCompleto = clienteRepo.selectById(idDoCliente);
+
+            conta.setCliente(clienteCompleto);
+
+            return conta;
+        }
+
+        return null;
     }
 }

@@ -103,7 +103,7 @@ public class AdminController {
                 Stage stage = new Stage();
                 stage.setTitle("Editar Cliente - " + selecionado.getNome());
                 stage.setScene(new Scene(root));
-                stage.initModality(Modality.APPLICATION_MODAL); // Trava a tela de trás
+                stage.initModality(Modality.APPLICATION_MODAL);
                 stage.showAndWait();
 
                 atualizarTabela();

@@ -2,11 +2,6 @@ package br.com.dbank.repository;
 
 import br.com.dbank.model.Transacao;
 import br.com.dbank.util.ConexaoDB;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;

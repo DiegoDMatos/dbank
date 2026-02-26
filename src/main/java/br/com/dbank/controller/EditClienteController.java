@@ -16,7 +16,6 @@ public class EditClienteController {
     private Cliente cliente;
     private SqlAdminRepository adminRepo = new SqlAdminRepository();
 
-    // Método para receber os dados da tela principal
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
         txtCpf.setText(cliente.getCpf());
@@ -31,12 +30,11 @@ public class EditClienteController {
             return;
         }
 
-        // Atualiza o objeto com os novos dados
         cliente.setNome(txtNome.getText());
         cliente.setTelefone(txtTelefone.getText());
 
         try {
-            adminRepo.atualizarCliente(cliente); // Executa o UPDATE no banco
+            adminRepo.atualizarCliente(cliente);
             fecharJanela();
         } catch (Exception e) {
             mostrarAlerta("Erro", "Falha ao atualizar banco: " + e.getMessage(), Alert.AlertType.ERROR);

@@ -13,6 +13,7 @@ public class CadastroController{
     @FXML private TextField txtNome;
     @FXML private TextField txtCPF;
     @FXML private PasswordField txtSenha;
+    @FXML private TextField txtTelefone;
 
     private ClienteService clienteService = new ClienteService();
 
@@ -22,6 +23,7 @@ public class CadastroController{
             Cliente novoCliente = new Cliente();
             novoCliente.setNome(txtNome.getText());
             novoCliente.setCpf(txtCPF.getText());
+            novoCliente.setTelefone(txtTelefone.getText());
 
             String numeroDaConta = clienteService.cadastrarCliente(novoCliente, txtSenha.getText());
 
