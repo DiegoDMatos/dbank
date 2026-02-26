@@ -13,10 +13,6 @@
             <font><Font name="System Bold" size="24.0" /></font>
         </Label>
         <VBox spacing="10.0" maxWidth="250.0">
-            <TextField fx:id="txtUsuario" placeholder="Usuário Admin" />
-            <PasswordField fx:id="txtSenha" placeholder="Senha" />
-            <Button onAction="#handleLogin" prefWidth="250.0" text="Acessar Painel"
-                    style="-fx-background-color: #1EBDD9; -fx-text-fill: white; -fx-font-weight: bold;" />
         </VBox>
     </children>
 </VBox>

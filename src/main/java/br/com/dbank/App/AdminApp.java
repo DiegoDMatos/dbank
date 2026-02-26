@@ -12,7 +12,6 @@ public class AdminApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Admin.fxml"));
         Parent root = loader.load();
 
-        // Defina o tamanho explicitamente aqui para teste
         Scene scene = new Scene(root, 900, 600);
         stage.setScene(scene);
         stage.setTitle("DBank - Painel Administrativo");

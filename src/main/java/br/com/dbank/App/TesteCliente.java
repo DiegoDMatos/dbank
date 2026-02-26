@@ -13,7 +13,7 @@ public class TesteCliente {
         Cliente c = new Cliente();
         c.setNome("João do IFCE");
         c.setCpf("999.888.777-00");
-        c.setDataNascimento(LocalDate.of(1995, 5, 20)); // Evita o NullPointerException
+        c.setDataNascimento(LocalDate.of(1995, 5, 20));
 
         int id = repo.insert(c, "senha123");
         System.out.println("Cliente inserido com ID: " + id);

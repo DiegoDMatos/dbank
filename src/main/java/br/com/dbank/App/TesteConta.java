@@ -13,22 +13,21 @@ public class TesteConta {
         SqlContaRepository repo = new SqlContaRepository();
 
         Conta conta = new Conta();
-        conta.setNumeroConta("001"); // Nosso VARCHAR(3)
+        conta.setNumeroConta("001");
         conta.setSaldo(new BigDecimal("500.00"));
         conta.setDataAbertura(LocalDate.now());
         conta.setStatus("ATIVA");
 
-        // Precisamos de objetos "dummy" apenas com os IDs que já existem no banco
         Cliente clienteExistente = new Cliente();
-        clienteExistente.setIdCliente(1); // Use um ID que você viu no MySQL Workbench
+        clienteExistente.setIdCliente(1);
         conta.setCliente(clienteExistente);
 
         Agencia agenciaExistente = new Agencia();
-        agenciaExistente.setCodigoAgencia(1); // Use um código que já inseriu
+        agenciaExistente.setCodigoAgencia(1);
         conta.setAgencia(agenciaExistente);
 
         repo.insert(conta);
-        System.out.println("✅ Conta 001" +
+        System.out.println("Conta 001" +
                 " criada com sucesso!");
     }
 
